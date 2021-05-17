@@ -1,0 +1,26 @@
+:root{
+    --white: #ffffff;
+    --accent:#8327F6;
+    --dark:#4022D4;
+    --medium: #3143EB;
+    --light:#2262D4;
+    --lightaccent:#27A9F6;
+}
+
+.top-queue-container{
+    background-image: linear-gradient(to bottom right,var(--accent), var(--medium), var(--lightaccent));
+    display:flex;
+    flex-direction:row;
+    justify-content: space-around;
+    padding: 7px 7px 7px 7px;
+}
+
+.bottom-queue-container{
+    background-image: linear-gradient(to bottom right,var(--blue), var(--lightblue));
+}
+
+.queue-title {
+    border-bottom: 2px white solid;
+    color: white;
+}
+

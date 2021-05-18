@@ -4,23 +4,29 @@ import io from 'socket.io-client'
 import './PublicView.css'
 
 const AdminView = () => {
-    const [submissions, setSubmissions] = useState([])
-    const socketRef = useRef()
 
-    useEffect(
-        () => {
-            socketRef.current = io.connect("http://localhost:4000")
-            socketRef.current.on("message", ({ name, description }) => {
-                setSubmissions([...submissions, { name, description }])
-            })
-            return () => socketRef.current.disconnect()
-        },
-        [submissions]
-    )
-
-    const deleteSubmission = id => {
-
+    let one = {
+        index: 1,
+        name: "Bilal",
+        description: "off to get a 1 on the AP CSA Exam"
     }
+    let two = {
+        index: 2,
+        name: "Noah",
+        description: "i hate this"
+    }
+    let three = {
+        index: 3,
+        name: "Ron",
+        description: "i hate this too"
+    }
+    let four = {
+        index: 4,
+        name: "Admin",
+        description: "need more time on design poject :/"
+    }
+
+    const [submissions, setSubmissions] = useState([one, two, three, four])
 
     return (
         <Fragment>
@@ -42,24 +48,25 @@ const AdminView = () => {
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Grade</th>
                             <th>Description</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {submissions.map(person => (
-                            <tr key={person.id}>
-                                <td>{person.name}</td>
-                                <td>{person.grade}</td>
-                                <td>{person.description}</td>
-                                <td>
-                                    <button className="btn btn-danger" onClick={() => deleteSubmission(person)}>
-                                        <i className="fas fa-times"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
+                        {submissions.map((subs) => (
+                            <Fragment>
+                                <tr key={subs.index}>
+                                    <td>{subs.name}</td>
+                                    <td>{subs.description}</td>
+                                    <td>
+                                        <button type="button" className="btn btn-danger ml-3">
+                                            <i className="fas fa-times" />
+                                        </button>
+                                    </td>
+                                </tr>
+                            </Fragment>
+                        ))
+                        }
                     </tbody>
                 </table>
             </div>

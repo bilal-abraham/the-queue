@@ -5,32 +5,47 @@ import './PublicView.css'
 
 
 const PublicView = () => {
+    const socket = io.connect('http://localhost:3000');
     const [password, setPassword] = useState("")
     let adminpass = "admin123"
 
-    const [state, setState] = useState({ name: "", description: "" })
-    const [submissions, setSubmissions] = useState([])
+    let one = {
+        index: 1,
+        name: "Bilal",
+        description: "off to get a 1 on the AP CSA Exam"
+    }
+    let two = {
+        index: 2,
+        name: "Noah",
+        description: "i hate this"
+    }
+    let three = {
+        index: 3,
+        name: "Ron",
+        description: "i hate this too"
+    }
+    let four = {
+        index: 4,
+        name: "Admin",
+        description: "need more time on design poject :/"
+    }
 
-    const socketRef = useRef()
+    const [submissions, setSubmissions] = useState([one, two, three, four])
 
-    useEffect(
-        () => {
-            socketRef.current = io.connect("http://localhost:3000")
-            socketRef.current.on("message", ({ name, description }) => {
-                setSubmissions([...submissions, { name, description }])
-            })
-            return () => socketRef.current.disconnect()
-        },
-        [submissions]
-    )
+
+    socket.on("messages", (message) => {
+        console.log(socket.id)
+        console.log(message)
+    });
+
     /**
-     * 
+     * If the admin password entered is correct, admin access will be granted, and the login button will become available
      */
     const renderAdminLogin = () => {
         if (password === adminpass) {
             return (
                 <Link to="/admin">
-                    <button type="button" className="btn btn-secondary">Sumbit</button>
+                    <button type="button" className="btn btn-secondary" >Login</button>
                 </Link>
             )
         } else {
@@ -40,17 +55,11 @@ const PublicView = () => {
             )
         }
     }
-
-    const onTextChange = e => {
-        setState({ ...state, [e.target.name]: e.target.value })
-    }
-
-    const onMessageSubmit = e => {
-        e.preventDefault()
-        const [name, description] = state
-        socketRef.current.emit("message", { name, description })
-        setState({ description: '', name })
-    }
+    // const onMessagesSubmit = () => {
+    //     socket.emit("message", submissions)
+    //     console.log("emitted")
+    //     console.log(submissions)
+    // }
 
     return (
         <Fragment>
@@ -70,14 +79,13 @@ const PublicView = () => {
                                     <h5 className="modal-title">Create Submission</h5>
                                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <form onSubmit={onMessageSubmit}>
+                                <form>
                                     <div className="modal-body">
                                         {/*Text inside Modal that appears when "Create Submissions" Button is Pressed*/}
-                                        <input onChange={e => onTextChange(e)} value={state.name} className="form-control form-control-lg" type="text" name="name" placeholder="Name" />
-                                        {/* <input onChange={e => onTextChange(e)} value={state.grade} className="form-control form-control-lg" type="text" name="grade" placeholder="Grade" /> */}
-                                        <input onChange={e => onTextChange(e)} value={state.description} className="form-control form-control-lg" type="text" name="description" placeholder="Description" />
+                                        <input className="form-control form-control-lg" type="text" name="name" placeholder="Name" />
+                                        <input className="form-control form-control-lg" type="text" name="desc" placeholder="Description" />
                                         <div className="modal-footer">
-                                            <button type="button" className="btn btn-secondary">Submit</button>
+                                            <button type="button" className="btn btn-secondary" >Submit</button>
                                         </div>
                                     </div>
                                 </form>
@@ -86,7 +94,7 @@ const PublicView = () => {
                     </div>
                     {/* Admin Login Btn */}
                     <button type="button" className="btn btn-danger ml-3" data-bs-toggle="modal" data-bs-target="#adminModal">
-                        <i className="fas fa-lock"></i>
+                        <i className="fas fa-lock" />
                     </button>
                     {/* Admin Login Modal */}
                     <div className="modal fade" id="adminModal" tabIndex="-1" aria-hidden="true">
@@ -101,7 +109,7 @@ const PublicView = () => {
                                         <input className="form-control form-control-default" onChange={e => setPassword(e.target.value)} type="password" placeholder="Admin Password" />
                                     </form>
                                 </div>
-                                <div className="modal-footer ">
+                                <div className="modal-footer">
                                     {renderAdminLogin()}
                                 </div>
                             </div>
@@ -115,17 +123,15 @@ const PublicView = () => {
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Grade</th>
                             <th>Description</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {submissions.map((index) => (
+                        {submissions.map((subs) => (
                             <Fragment>
-                                <tr key={index}>
-                                    <td>{submissions.name}</td>
-                                    <td>{submissions.grade}</td>
-                                    <td>{submissions.description}</td>
+                                <tr key={subs.index}>
+                                    <td>{subs.name}</td>
+                                    <td>{subs.description}</td>
                                 </tr>
                             </Fragment>
                         ))

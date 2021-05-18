@@ -85,7 +85,7 @@ const PublicView = () => {
                     </div>
                     {/* Admin Login Btn */}
                     <button type="button" className="btn btn-danger ml-3" data-bs-toggle="modal" data-bs-target="#adminModal">
-                        <i class="fas fa-lock"></i>
+                        <i className="fas fa-lock"></i>
                     </button>
                     {/* Admin Login Modal */}
                     <div className="modal fade" id="adminModal" tabIndex="-1" aria-hidden="true">
@@ -110,7 +110,6 @@ const PublicView = () => {
             </div >
             <div className="bottom-queue-container">
                 {/* Submissions */}
-
                 <table id="rows" className="table table-striped table-dark text-center">
                     <thead>
                         <tr>

@@ -1,30 +1,23 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import io from 'socket.io-client'
 import './PublicView.css'
 
 const AdminView = () => {
-    let first = {
-        id: 1,
-        name: "Bilal",
-        grade: "10th",
-        description: "Needs Help"
-    }
+    const [submissions, setSubmissions] = useState([])
 
-    let second = {
-        id: 2,
-        name: "Ron",
-        grade: "10th",
-        description: "Needs More Help"
-    }
+    const socketRef = useRef()
 
-    let third = {
-        id: 3,
-        name: "Noah",
-        grade: "10th",
-        description: "Needs Even MORE Help"
-    }
-
-    let people = [first, second, third]
+    useEffect(
+        () => {
+            socketRef.current = io.connect("http://localhost:4000")
+            socketRef.current.on("message", ({ name, message }) => {
+                setSubmissions([...submissions, { name, message }])
+            })
+            return () => socketRef.current.disconnect()
+        },
+        [submissions]
+    )
 
     const deleteSubmission = id => {
 
@@ -56,14 +49,14 @@ const AdminView = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {people.map(person => (
+                        {submissions.map(person => (
                             <tr key={person.id}>
                                 <td>{person.name}</td>
                                 <td>{person.grade}</td>
                                 <td>{person.description}</td>
                                 <td>
                                     <button className="btn btn-danger" onClick={() => deleteSubmission(person)}>
-                                        <i class="fas fa-times"></i>
+                                        <i className="fas fa-times"></i>
                                     </button>
                                 </td>
                             </tr>

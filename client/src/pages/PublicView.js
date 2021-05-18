@@ -1,31 +1,16 @@
-import React, { Fragment } from 'react'
-import { Link } from 'react-router-dom'
+import React, { Fragment, useState, useEffect } from 'react'
+// import io from 'socket.io-client'
 
+import { Link } from 'react-router-dom'
 import './PublicView.css'
 
+
+// const socket = io.connect('http://localhost:4000')
+
 const PublicView = () => {
-    let first = {
-        id: 0,
-        name: "Bilal",
-        grade: "10th",
-        reason: "Needs Help"
-    }
-
-    let second = {
-        id: 2,
-        name: "Ron",
-        grade: "10th",
-        reason: "Needs More Help"
-    }
-
-    let third = {
-        id: 3,
-        name: "Noah",
-        grade: "10th",
-        reason: "Needs Even MORE Help"
-    }
-
-    let people = [first, second, third]
+    const [password, setPassword] = useState("")
+    const [state, setState] = useState({ name: "", grade: "", description: "" })
+    const [submissions, setSubmission] = useState([])
 
     return (
         <Fragment>
@@ -33,21 +18,21 @@ const PublicView = () => {
                 {/* Header */}
                 <h1 className="queue-title text-center mt-5">Welcome to the Queue</h1>
                 <div className="d-flex mt-5">
-                    <button type="button" className="btn btn-secondary mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" className="btn btn-secondary mx-3" data-bs-toggle="modal" data-bs-target="#submissionsModal">
                         Create Submission
-                        </button>
-                    <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    </button>
+                    <div className="modal fade" id="submissionsModal" tabIndex="-1" aria-hidden="true">
                         <div className="modal-dialog">
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <h5 className="modal-title" id="exampleModalLabel">Create Submission</h5>
+                                    <h5 className="modal-title" >Create Submission</h5>
                                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div className="modal-body">
                                     <form>
-                                        <input type="text" name="name" placeholder="Name" />
-                                        <input type="text" name="grade" placeholder="Grade" />
-                                        <input type="text" name="reason" placeholder="Reason" />
+                                        <input className="form-control form-control-lg" type="text" name="name" placeholder="Name" />
+                                        <input className="form-control form-control-lg" type="text" name="grade" placeholder="Grade" />
+                                        <input className="form-control form-control-lg" type="text" name="description" placeholder="Description" />
                                     </form>
                                 </div>
                                 <div className="modal-footer">
@@ -56,11 +41,27 @@ const PublicView = () => {
                             </div>
                         </div>
                     </div>
-                    <Link to="/admin">
-                        <button type="button" className="btn btn-danger ml-2">
-                            Admin Login
-                        </button>
-                    </Link>
+                    <button type="button" className="btn btn-danger ml-3" data-bs-toggle="modal" data-bs-target="#adminModal">
+                        <i class="fas fa-lock"></i>
+                    </button>
+                    <div className="modal fade" id="adminModal" tabIndex="-1" aria-hidden="true">
+                        <div className="modal-dialog">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title">Log Into Admin Space: </h5>
+                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div className="modal-body">
+                                    <form>
+                                        <input className="form-control form-control-default" onChange={e => setPassword(e.target.value)} type="password" placeholder="Admin Password" />
+                                    </form>
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary">Join Admin Queue</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className="bottom-queue-container">
@@ -70,17 +71,20 @@ const PublicView = () => {
                         <tr>
                             <th>Name</th>
                             <th>Grade</th>
-                            <th>Reason</th>
+                            <th>Description</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {people.map(person => (
-                            <tr key={person.id}>
-                                <td>{person.name}</td>
-                                <td>{person.grade}</td>
-                                <td>{person.reason}</td>
-                            </tr>
-                        ))}
+                        {submissions.map(({ name, grade, description }, index) => (
+                            <Fragment>
+                                <tr key={index}>
+                                    <td>{submissions.name}</td>
+                                    <td>{submissions.grade}</td>
+                                    <td>{submissions.description}</td>
+                                </tr>
+                            </Fragment>
+                        ))
+                        }
                     </tbody>
                 </table>
             </div>

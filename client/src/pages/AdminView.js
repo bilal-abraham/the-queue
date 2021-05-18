@@ -20,7 +20,7 @@ const AdminView = () => {
     let third = {
         id: 3,
         name: "Noah",
-        grade: "0th",
+        grade: "10th",
         description: "Needs Even MORE Help"
     }
 
@@ -62,7 +62,7 @@ const AdminView = () => {
                                 <td>{person.description}</td>
                                 <td>
                                     <button className="btn btn-danger" onClick={() => deleteSubmission(person)}>
-                                        Delete
+                                        <i class="fas fa-times"></i>
                                     </button>
                                 </td>
                             </tr>

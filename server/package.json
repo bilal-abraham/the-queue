@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17n.1",
     "modules": "^0.4.0",
     "node": "^16.1.0",
     "nodemon": "^2.0.7",

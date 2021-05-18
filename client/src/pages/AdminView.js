@@ -5,14 +5,13 @@ import './PublicView.css'
 
 const AdminView = () => {
     const [submissions, setSubmissions] = useState([])
-
     const socketRef = useRef()
 
     useEffect(
         () => {
             socketRef.current = io.connect("http://localhost:4000")
-            socketRef.current.on("message", ({ name, message }) => {
-                setSubmissions([...submissions, { name, message }])
+            socketRef.current.on("message", ({ name, description }) => {
+                setSubmissions([...submissions, { name, description }])
             })
             return () => socketRef.current.disconnect()
         },

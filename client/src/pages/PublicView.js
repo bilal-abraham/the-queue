@@ -15,15 +15,17 @@ const PublicView = () => {
 
     useEffect(
         () => {
-            socketRef.current = io.connect("http://localhost:4000")
-            socketRef.current.on("message", ({ name, message }) => {
-                setSubmissions([...submissions, { name, message }])
+            socketRef.current = io.connect("http://localhost:3000")
+            socketRef.current.on("message", ({ name, description }) => {
+                setSubmissions([...submissions, { name, description }])
             })
             return () => socketRef.current.disconnect()
         },
         [submissions]
     )
-
+    /**
+     * 
+     */
     const renderAdminLogin = () => {
         if (password === adminpass) {
             return (
@@ -47,15 +49,14 @@ const PublicView = () => {
         e.preventDefault()
         const [name, description] = state
         socketRef.current.emit("message", { name, description })
-        setState({ message: '', name })
-        console.log("gf3r")
+        setState({ description: '', name })
     }
 
     return (
         <Fragment>
             <div className="top-queue-container">
                 {/* Header */}
-                <h1 h1 className="queue-title text-center mt-5" > Welcome to the Queue</h1>
+                <h1 className="queue-title text-center mt-5" > Welcome to the Queue</h1>
                 <div className="d-flex mt-5">
                     {/* Create Submission Btn */}
                     <button type="button" className="btn btn-secondary mx-3" data-bs-toggle="modal" data-bs-target="#submissionsModal">
@@ -73,7 +74,7 @@ const PublicView = () => {
                                     <div className="modal-body">
                                         {/*Text inside Modal that appears when "Create Submissions" Button is Pressed*/}
                                         <input onChange={e => onTextChange(e)} value={state.name} className="form-control form-control-lg" type="text" name="name" placeholder="Name" />
-                                        <input onChange={e => onTextChange(e)} value={state.grade} className="form-control form-control-lg" type="text" name="grade" placeholder="Grade" />
+                                        {/* <input onChange={e => onTextChange(e)} value={state.grade} className="form-control form-control-lg" type="text" name="grade" placeholder="Grade" /> */}
                                         <input onChange={e => onTextChange(e)} value={state.description} className="form-control form-control-lg" type="text" name="description" placeholder="Description" />
                                         <div className="modal-footer">
                                             <button type="button" className="btn btn-secondary">Submit</button>

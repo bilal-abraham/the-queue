@@ -36,6 +36,7 @@ const AdminView = () => {
                 {/* Header */}
                 <h1 className="queue-title text-center mt-5">Welcome to the Queue</h1>
                 <div className="d-flex mt-5">
+                    {/* Sign Out Button */}
                     <Link to="/">
                         <button type="button" className="btn btn-danger ml-2">
                             Sign Out

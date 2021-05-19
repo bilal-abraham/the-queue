@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect, useRef } from 'react'
+import React, { Fragment, useState } from 'react'
 import { Link } from 'react-router-dom'
 import io from 'socket.io-client'
 import './PublicView.css'
@@ -44,22 +44,34 @@ const PublicView = () => {
     const renderAdminLogin = () => {
         if (password === adminpass) {
             return (
-                <Link to="/admin">
-                    <button type="button" className="btn btn-secondary" >Login</button>
-                </Link>
+                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Submit</button>
             )
         } else {
             return (
                 //Default text that appears until correct admin password is entered
-                <button type="button" className="btn btn-secondary disabled" > Incorrect Password... </button >
+                <button type="button" className="btn btn-secondary disabled">Incorrect Password... </button >
             )
         }
     }
-    // const onMessagesSubmit = () => {
-    //     socket.emit("message", submissions)
-    //     console.log("emitted")
-    //     console.log(submissions)
-    // }
+
+    const renderAdminBtn = () => {
+        if (password === adminpass) {
+            return (
+                <Link to="/admin">
+                    <button type="button" className="btn btn-danger ml-3">
+                        <i class="fas fa-unlock"></i>
+                    </button>
+                </Link>
+            )
+        }
+        else {
+            return (
+                <button type="button" className="btn btn-danger ml-3" data-bs-toggle="modal" data-bs-target="#adminModal">
+                    <i className="fas fa-lock" />
+                </button>
+            )
+        }
+    }
 
     return (
         <Fragment>
@@ -93,9 +105,7 @@ const PublicView = () => {
                         </div>
                     </div>
                     {/* Admin Login Btn */}
-                    <button type="button" className="btn btn-danger ml-3" data-bs-toggle="modal" data-bs-target="#adminModal">
-                        <i className="fas fa-lock" />
-                    </button>
+                    {renderAdminBtn()}
                     {/* Admin Login Modal */}
                     <div className="modal fade" id="adminModal" tabIndex="-1" aria-hidden="true">
                         <div className="modal-dialog">
@@ -123,19 +133,10 @@ const PublicView = () => {
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Description</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {submissions.map((subs) => (
-                            <Fragment>
-                                <tr key={subs.index}>
-                                    <td>{subs.name}</td>
-                                    <td>{subs.description}</td>
-                                </tr>
-                            </Fragment>
-                        ))
-                        }
+
                     </tbody>
                 </table>
             </div>

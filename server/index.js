@@ -9,9 +9,7 @@ io.on('connection', socket => {
         console.log(message)
         io.emit('message', `${message}`)
     })
-
 })
-
 
 http.listen(port, () => {
     console.log(`Server is Listening on Port ${port}

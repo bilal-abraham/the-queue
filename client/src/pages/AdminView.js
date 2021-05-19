@@ -4,7 +4,6 @@ import io from 'socket.io-client'
 import './PublicView.css'
 
 const AdminView = () => {
-
     let one = {
         index: 1,
         name: "Bilal",
@@ -42,7 +41,6 @@ const AdminView = () => {
                     </Link>
                 </div>
             </div>
-
             <div className="bottom-queue-container">
                 <table className="table table-striped table-dark text-center">
                     <thead>

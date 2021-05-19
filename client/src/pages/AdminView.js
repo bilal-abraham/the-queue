@@ -1,31 +1,11 @@
-import React, { Fragment, useState, useEffect, useRef } from 'react'
+import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
 import './PublicView.css'
 
 const AdminView = () => {
-    let one = {
-        index: 1,
-        name: "Bilal",
-        description: "off to get a 1 on the AP CSA Exam"
-    }
-    let two = {
-        index: 2,
-        name: "Noah",
-        description: "i hate this"
-    }
-    let three = {
-        index: 3,
-        name: "Ron",
-        description: "i hate this too"
-    }
-    let four = {
-        index: 4,
-        name: "Admin",
-        description: "need more time on design poject :/"
-    }
 
-    const [submissions, setSubmissions] = useState([one, two, three, four])
+
 
     return (
         <Fragment>
@@ -51,20 +31,7 @@ const AdminView = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {submissions.map((subs) => (
-                            <Fragment>
-                                <tr key={subs.index}>
-                                    <td>{subs.name}</td>
-                                    <td>{subs.description}</td>
-                                    <td>
-                                        <button type="button" className="btn btn-danger ml-3">
-                                            <i className="fas fa-times" />
-                                        </button>
-                                    </td>
-                                </tr>
-                            </Fragment>
-                        ))
-                        }
+
                     </tbody>
                 </table>
             </div>

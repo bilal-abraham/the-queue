@@ -1,42 +1,31 @@
-import React, { Fragment, useState } from 'react'
+import { Fragment, useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import io from 'socket.io-client'
+import socketIOClient from "socket.io-client"
 import './PublicView.css'
 
 
+function handleErrors(err) {
+    console.log("ERROR:", err);
+}
+
 const PublicView = () => {
-    const socket = io.connect('http://localhost:3000');
+
+    useEffect(
+        () => {
+            let socket = socketIOClient("http://localhost:3000")
+            socket.on('connect_error', err => handleErrors(err));
+            socket.on("messages", () => {
+                console.log("BOB");
+            })
+            return () => socket.disconnect()
+        }
+    )
+
     const [password, setPassword] = useState("")
+
     let adminpass = "admin123"
 
-    let one = {
-        index: 1,
-        name: "Bilal",
-        description: "off to get a 1 on the AP CSA Exam"
-    }
-    let two = {
-        index: 2,
-        name: "Noah",
-        description: "i hate this"
-    }
-    let three = {
-        index: 3,
-        name: "Ron",
-        description: "i hate this too"
-    }
-    let four = {
-        index: 4,
-        name: "Admin",
-        description: "need more time on design poject :/"
-    }
-
-    const [submissions, setSubmissions] = useState([one, two, three, four])
-
-
-    socket.on("messages", (message) => {
-        console.log(socket.id)
-        console.log(message)
-    });
+    // const [submissions, setSubmissions] = useState([one, two, three, four])
 
     /**
      * If the admin password entered is correct, admin access will be granted, and the login button will become available
@@ -59,7 +48,7 @@ const PublicView = () => {
             return (
                 <Link to="/admin">
                     <button type="button" className="btn btn-danger ml-3">
-                        <i class="fas fa-unlock"></i>
+                        <i className="fas fa-unlock"></i>
                     </button>
                 </Link>
             )
@@ -71,6 +60,22 @@ const PublicView = () => {
                 </button>
             )
         }
+    }
+
+    const submitTicket = (event) => {
+        let submissionTicket = document.getElementById('submissionTicket');
+        let inputs = submissionTicket.querySelectorAll('input');
+        let ticket = {}
+        for (let input of inputs) {
+            ticket[input.name] = input.value;
+        }
+
+
+        /*socket.emit("messages", ticket, function (data) {
+            console.log("SERVER GOT MESSAGE")
+
+            // Add submission to local client
+        })*/
     }
 
     return (
@@ -91,16 +96,15 @@ const PublicView = () => {
                                     <h5 className="modal-title">Create Submission</h5>
                                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <form>
-                                    <div className="modal-body">
-                                        {/*Text inside Modal that appears when "Create Submissions" Button is Pressed*/}
-                                        <input className="form-control form-control-lg" type="text" name="name" placeholder="Name" />
-                                        <input className="form-control form-control-lg" type="text" name="desc" placeholder="Description" />
-                                        <div className="modal-footer">
-                                            <button type="button" className="btn btn-secondary" >Submit</button>
-                                        </div>
+                                <div id='submissionTicket' className="modal-body">
+                                    {/*Text inside Modal that appears when "Create Submissions" Button is Pressed*/}
+                                    <input className="form-control form-control-lg" type="text" name="name" placeholder="Name" />
+                                    <input className="form-control form-control-lg" type="text" name="grade" placeholder="Grade" />
+                                    <input className="form-control form-control-lg" type="text" name="desc" placeholder="Description" />
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-secondary" onClick={submitTicket}>Submit</button>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -145,3 +149,4 @@ const PublicView = () => {
 }
 
 export default PublicView;
+

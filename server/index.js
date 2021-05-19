@@ -3,17 +3,16 @@ const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 const port = 3000;
 
-io.on('connection', socket => {
+io.on('connection', (socket) => {
     console.log("made socket connection")
-    socket.on('message', (message) => {
-        console.log(message)
-        io.emit('message', `${message}`)
-    })
-})
+    socket.on('messages', (message) => {
+        console.log(message);
+        //io.emit('messages', message);
+    });
+});
 
 http.listen(port, () => {
-    console.log(`Server is Listening on Port ${port}
+    console.log(`Server is Listening on Port ${port} 
 
-        Local: http://localhost:${port}
-`)
+Local: http://localhost:${port}`)
 })

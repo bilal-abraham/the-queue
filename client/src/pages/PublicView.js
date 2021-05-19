@@ -18,8 +18,7 @@ const PublicView = () => {
                 console.log("BOB");
             })
             return () => socket.disconnect()
-        }
-    )
+        }, [])
 
     const [password, setPassword] = useState("")
 

@@ -10,12 +10,29 @@ function handleErrors(err) {
 
 const PublicView = () => {
 
+    let socket = null
     useEffect(
         () => {
-            let socket = socketIOClient("http://localhost:3000")
-            socket.on('connect_error', err => handleErrors(err));
-            socket.on("messages", () => {
-                console.log("BOB");
+            socket = socketIOClient("http://localhost:3001")
+            socket.on("submission:add", (message) => {
+                
+                let row = document.createElement('div');
+                row.classList.add('row');
+
+                let order = ['name', 'grade', 'desc']
+
+                //Always guarentees entries into the Hashmap are in the order 'name', 'grade', 'description'
+                for( let field of order ){
+                    let div = document.createElement('div');
+                    div.classList.add(field);
+
+                    div.innerHTML = message[field]
+                    row.appendChild(div);
+                }                
+
+                //Adds row to the rows
+                document.getElementById('rows').appendChild(row);
+
             })
             return () => socket.disconnect()
         }, [])
@@ -70,11 +87,11 @@ const PublicView = () => {
         }
 
 
-        /*socket.emit("messages", ticket, function (data) {
+        socket.emit("submission:add", ticket, function (data) {
             console.log("SERVER GOT MESSAGE")
 
             // Add submission to local client
-        })*/
+        })
     }
 
     return (
@@ -132,16 +149,9 @@ const PublicView = () => {
             </div >
             <div className="bottom-queue-container">
                 {/* Submissions */}
-                <table id="rows" className="table table-striped table-dark text-center">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                </table>
+                
+                <div id='rows'>
+                </div> 
             </div>
         </Fragment >
     )

@@ -1,18 +1,34 @@
-const app = require('express')()
+const express = require('express')
+const path = require('path')
+
+const app = express()
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
-const port = 3000;
+const port = 3001;
+
+app.use(express.static('static/build'))
+
+let submissions = []
+
 
 io.on('connection', (socket) => {
-    console.log("made socket connection")
-    socket.on('messages', (message) => {
-        console.log(message);
-        //io.emit('messages', message);
+    
+    for( let submission of submissions ){
+        socket.emit('submission:add', submission);
+    }
+    
+    
+    socket.on('submission:add', (message) => {
+        submissions.push(message);
+        io.emit('submission:add', message);
     });
 });
 
-http.listen(port, () => {
-    console.log(`Server is Listening on Port ${port} 
+app.get('/', function(req,res){
+    
+    res.sendFile(path.join(__dirname, 'static', 'build', 'index.html'))
+})
 
-Local: http://localhost:${port}`)
+http.listen(port, () => {
+    console.log(`Server is Listening on Port ${port}\nLocal: http://localhost:${port}`)
 })

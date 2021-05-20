@@ -10,25 +10,27 @@ app.use(express.static('static/build'))
 
 let submissions = []
 
-
+//emits back to client
 io.on('connection', (socket) => {
-    
-    for( let submission of submissions ){
+
+    for (let submission of submissions) {
         socket.emit('submission:add', submission);
     }
-    
-    
+
+
     socket.on('submission:add', (message) => {
         submissions.push(message);
         io.emit('submission:add', message);
     });
 });
 
-app.get('/', function(req,res){
-    
+//returns file of website
+app.get('/', function (req, res) {
+
     res.sendFile(path.join(__dirname, 'static', 'build', 'index.html'))
 })
 
+//http handshake
 http.listen(port, () => {
     console.log(`Server is Listening on Port ${port}\nLocal: http://localhost:${port}`)
 })
